@@ -1,0 +1,6 @@
+class Edge:
+    def __init__(self, from_node, to_node, capacity):
+        self.from_node = from_node  # đỉnh xuất phát
+        self.to_node = to_node      # đỉnh kết thúc
+        self.capacity = capacity    # dung lượng tối đa
+        self.flow = 0               # luồng hiện tại
