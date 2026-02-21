@@ -1,0 +1,6 @@
+class FlowNetwork:
+    def __init__(self, num_vertices):
+        self.num_vertices = num_vertices
+        self.adj_list = [[] for _ in range(num_vertices)]
+        self.source = None
+        self.sink = None
