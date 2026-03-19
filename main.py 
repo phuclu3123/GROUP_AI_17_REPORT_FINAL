@@ -1,0 +1,51 @@
+
+from individual import Population
+# Ma trận khoảng cách 
+distance_matrix = [
+    [0, 2, 9, 10],
+    [1, 0, 6, 4],
+    [15, 7, 0, 8],
+    [6, 3, 12, 0]
+]
+
+# Số node 
+num_nodes = 4
+
+# Khởi tạo quần thể
+pop = Population(size=5, num_nodes=num_nodes)
+
+pop.initialize()
+demands = [0, 2, 3, 1]
+capacity = 5
+
+pop.evaluate(distance_matrix, demands, capacity)
+
+# Lấy kết quả
+best = pop.get_best()
+
+print("Kết quả:")
+for ind in pop.individuals:
+    print(ind.route, "Fitness:", ind.fitness)
+
+print("\nBest route:", best.route, "Fitness:", best.fitness)
+# Vẽ route
+print("\n--- ROUTE VISUALIZATION ---")
+
+route_str = " -> ".join(map(str, best.route))
+print("Best route:", route_str)
+
+# Nhận xét
+print("\n--- NHẬN XÉT ---")
+
+print("1. Các cá thể có route khác nhau nên fitness khác nhau.")
+
+print("2. Fitness được tính dựa trên tổng khoảng cách và penalty nếu vượt quá tải.")
+
+print("3. Những route có fitness cao thường do vượt capacity nên bị phạt.")
+
+print("4. Best route là lời giải có chi phí nhỏ nhất trong quần thể.")
+
+print("5. Thuật toán hiện tại mới dừng ở bước khởi tạo và đánh giá,")
+print("   chưa có chọn lọc, lai ghép (crossover) và đột biến (mutation).")
+
+print("=> Có thể cải thiện bằng cách bổ sung đầy đủ các bước của Genetic Algorithm.")
