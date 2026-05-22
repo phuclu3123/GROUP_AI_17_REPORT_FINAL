@@ -7,13 +7,74 @@
 
 Mục tiêu của repo không chỉ là chạy một thuật toán, mà là xây dựng một ứng dụng desktop có giao diện, dữ liệu, trực quan hóa, dashboard, xuất báo cáo và quy trình đóng gói phần mềm giống một sản phẩm hoàn chỉnh.
 
-## Tải Phần Mềm
+## Tải Và Chạy Nhanh
 
 Bản Windows mới nhất:
 
 [Download VRP-GA-Solver-Windows.zip](https://github.com/phuclu3123/GROUP_AI_17_REPORT_FINAL/releases/latest/download/VRP-GA-Solver-Windows.zip)
 
-File ZIP chứa `VRP-GA-Solver.exe`. Repo không lưu trực tiếp file `.exe`; GitHub Actions sẽ tự build và đưa file chạy lên GitHub Releases khi tạo version tag.
+File ZIP chứa `VRP-GA-Solver.exe`; sau khi tải về chỉ cần giải nén ZIP và chạy file `.exe`. Repo không lưu trực tiếp file `.exe`; GitHub Actions sẽ tự build và đưa file chạy lên GitHub Releases khi tạo version tag.
+
+## Cài Đặt Từ Code GitHub
+
+Phù hợp khi muốn xem source code, chạy thử trực tiếp bằng Python hoặc chỉnh sửa thuật toán/giao diện.
+
+### Yêu Cầu Môi Trường
+
+- Windows 10/11.
+- Python 3.12 khuyến nghị.
+- Git để clone repository.
+- Kết nối internet trong lần cài dependency đầu tiên.
+
+### Clone Repository
+
+```powershell
+git clone https://github.com/phuclu3123/GROUP_AI_17_REPORT_FINAL.git
+cd GROUP_AI_17_REPORT_FINAL
+```
+
+Nếu không dùng Git, có thể vào trang GitHub của repo, chọn **Code** > **Download ZIP**, giải nén rồi mở terminal tại thư mục vừa giải nén.
+
+### Tạo Môi Trường Ảo Và Cài Dependency
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r VRP_GA_2_APP\requirements.txt
+```
+
+Nếu PowerShell chặn kích hoạt môi trường ảo, chạy lệnh sau trong đúng cửa sổ PowerShell hiện tại rồi kích hoạt lại:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+### Chạy Ứng Dụng Từ Source
+
+```powershell
+python VRP_GA_2_APP\main.py
+```
+
+Ứng dụng sẽ mở giao diện PyQt6 để chọn bộ dữ liệu, cấu hình tham số GA/CSO, chạy tối ưu, xem bản đồ, biểu đồ hội tụ và xuất báo cáo.
+
+### Kiểm Tra Code Trước Khi Nộp
+
+```powershell
+python -m compileall -q VRP_GA_2_APP
+```
+
+Lệnh này giống bước CI chính của repo, dùng để kiểm tra nhanh lỗi cú pháp Python.
+
+### Build File Chạy Windows Tại Máy
+
+```powershell
+python -m pip install -r VRP_GA_2_APP\requirements.txt -r requirements-dev.txt
+pyinstaller --noconfirm --clean packaging\VRP-GA-Solver.spec
+```
+
+Sau khi build xong, file chạy nằm trong thư mục `dist\VRP-GA-Solver\`.
 
 ## Bài Toán Được Giải
 
