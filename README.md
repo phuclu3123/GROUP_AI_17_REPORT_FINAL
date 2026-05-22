@@ -202,7 +202,7 @@ total_cost =
   + time_window_penalty
   + invalid_edge_penalty
 
-fitness = 1 / total_cost
+fitness = 1 / total_cost + epsilon
 ```
 
 Trong đó:
