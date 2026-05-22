@@ -1,0 +1,806 @@
+Cấu trúc dữ liệu và giải thuật
+Lữ Võ Hoàng Phúc
+Ngày 7 tháng 2 năm 2026
+Mục lục
+1 Thuật toán CSO theo tài liệu 2
+2 Thuật toán CSO tối ưu (Khác tài liệu) 8
+3 Thuật toán PSO 14
+1
+Lập trình thi đấu - phỏng vấn
+§1 Thuật toán CSO theo tài liệu
+Đầu vào:
+✓M- số chiều của không gian tìm kiếm
+✓[Pmin
+i,j, Pmax
+i,j]- phạm vi biến thiên cho con mèo thứivà chiều thứj
+✓MR- tỷ lệ hỗn hợp (mixture ratio)
+✓SMP- bộ nhớ gộp chế độ tìm kiếm (seeking memory pool)
+✓SRD- phạm vi tìm kiếm của chiều được chọn
+✓CDC- số lượng chiều cần thay đổi
+✓SPC- cân nhắc vị trí bản thân
+✓N- tổng số lượng mèo
+✓max- số vòng lặp tối đa
+✓c 1- hằng số cập nhật vận tốc của mèo trong chế độ truy vết
+Đầu ra:Gbest- vị trí tốt nhất mà một con mèo đạt được
+Thuật toán 4: Phiên bản toàn cục của CSO
+1Khởi tạo ngẫu nhiên quần thể mèoX i(i= 1, . . . , N)vectorMchiều
+2Khởi tạoGbestvà gán vị trí tốt nhất ban đầu choGbest
+3whiletiêu chí dừng chưa thỏa mãnhoặcI < I maxdo
+4Phân loại mèo vàochế độ tìm kiếmhoặctruy vếtdựa trênMR
+5Tính toán độ thích nghi (fitness) và cập nhậtGbest
+6fori←1đếnNdo
+7ifX iở chế độ tìm kiếmthen
+/* Xử lý hành vi tìm kiếm (Seeking Mode) */
+8TạoSMPbản sao củaX i
+9Cập nhật vị trí:X cn=X c×(1±SRD×R)
+10Chọn ngẫu nhiên một vị trí từSMPđể di chuyển
+11else
+/* Xử lý hành vi truy vết (Tracing Mode) */
+12Cập nhật vận tốc:v i,d=vi,d+R×c 1×(X best,d−X i,d)
+13Cập nhật vị trí:X i,d,new =X i,d,old +vi,d
+14end
+15end
+16end
+17returnGbest
+1importrandom
+2importsys
+ὑ7Cấu trúc dữ liệu và giải thuật 2 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+3
+4classCat:
+5"""
+6L ´ơp đại diê .n cho mô.t con mèo (cá th /hookaboveê)
+7"""
+8def__init__(self, num_dimensions):
+9self.P = [0.0] * num_dimensions# Vị trí
+10self.V = [0.0] * num_dimensions# Vâ .n t´ôc
+11self.Pbest = [0.0] * num_dimensions# Vị trí t ´ôt nh´ât cá nhân
+12self.Eval = 0.0# Fitness hiê .n tại
+13self.EvalPbest =float(’inf’)# Fitness t ´ôt nh´ât cá nhân
+14self.flag = 0# 0: Seeking, 1: Tracing
+15
+16classCatSwarmOptimization:
+17def__init__(self, M, N, SMP, SRD, CDC, c1, Pmin, Pmax, VMAX, VMIN, MR,
+◁arrowhookleft→MAX_ITER):
+18"""
+19Kh /hookaboveơi tạo thuâ .t toán v ´ơi các tham s ´ô đươ.c truy`ên vào.
+20
+21Args:
+22M (int): S ´ô chi`êu không gian
+23N (int): S ´ô lươ.ng mèo (kích thư ´ơc qu`ân th/hookaboveê)
+24SMP (int): Seeking Memory Pool (S ´ô bản sao trong ch ´ê đô.tìm ki´êm)
+25SRD (float): Seeking Range of the selected Dimension (Phạm vi tìm
+◁arrowhookleft→ki´êm)
+26CDC (int): Counts of Dimension to Change (S ´ô chi`êu c`ân thay đ /hookaboveôi)
+27c1 (float): H `ăng s´ô gia t´ôc
+28VMAX (float): Vâ .n t´ôc t´ôi đa
+29VMIN (float): Vâ .n t´ôc t´ôi thi/hookaboveêu
+30MR (float): Mixture Ratio (Tỷ lê .h˜ôn hơ.p gi˜ưa Seeking và Tracing)
+31MAX_ITER (int): S ´ô vòng lă .p t´ôi đa
+32"""
+33# --- 1. C´ÂU HÌNH THAM S´Ô T`Ư INPUT ---
+34self.M = M
+35self.N = N
+36self.SMP = SMP
+37self.SRD = SRD
+38self.CDC = CDC
+39self.c1 = c1
+40self.VMAX = VMAX
+41self.VMIN = VMIN
+42self.MR = MR
+43self.MAX_ITER = MAX_ITER
+44
+45# Các bi ´ên nô.i bô.
+46self.swarm = []# Qu `ân th/hookaboveê mèo
+47self.Gbest = [0.0] * M# Vị trí t ´ôt nh´ât toàn cục
+48self.EvalGbest =float(’inf’)
+49self.TheBest = 0# Chỉ s ´ô của mèo t ´ôt nh´ât hiê.n tại
+50
+51# Gi ´ơi hạn không gian tìm ki ´êm (Pmin, Pmax)
+52# Bạn có th /hookaboveê đưa cái này ra tham s ´ô n´êu mu´ôn linh hoạt hơn n ˜ưa
+ὑ7Cấu trúc dữ liệu và giải thuật 3 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+53self.Pmin = [Pmin] * M
+54self.Pmax = [Pmax] * M
+55
+56# --- Các hàm tiê .n ích ---
+57
+58defOF(self, x):
+59"""Hàm mục tiêu (Sphere Function)"""
+60t = 0.0
+61forvalinx:
+62t += val * val
+63returnt
+64
+65defrandom_0_1(self):
+66"""Sinh s ´ô ng˜âu nhiên [0, 1]"""
+67returnrandom.random()
+68
+69# --- Các phương th ´ưc chính của thuâ .t toán ---
+70
+71definitialize(self):
+72"""1. Kh /hookaboveơi tạo qu `ân th/hookaboveê"""
+73self.swarm = []
+74foriin range(self.N):
+75cat = Cat(self.M)
+76cat.flag = 0
+77forjin range(self.M):
+78# Random vị trí trong khoảng [Pmin, Pmax]
+79cat.P[j] = (self.Pmax[j] -self.Pmin[j]) *self.random_0_1() +
+◁arrowhookleft→self.Pmin[j]
+80cat.Pbest[j] = cat.P[j]
+81cat.V[j] = 0.0
+82
+83cat.Eval =self.OF(cat.P)
+84cat.EvalPbest = cat.Eval
+85self.swarm.append(cat)
+86
+87# Câ .p nhâ.t TheBest ban đ `âu
+88if self.swarm[i].Eval <self.swarm[self.TheBest].Eval:
+89self.TheBest = i
+90
+91# Câ .p nhâ.t Gbest ban đ `âu
+92self.EvalGbest =self.swarm[self.TheBest].Eval
+93self.Gbest =self.swarm[self.TheBest].P[:]
+94
+95defassign_modes(self):
+96"""2. Phân loại ch ´ê đô.(Seeking/Tracing)"""
+97cats_in_seeking =int((1 -self.MR) *self.N)
+98
+99# Tạo danh sách flag tạm th `ơi
+100temp_flags = [0] * cats_in_seeking + [1] * (self.N - cats_in_seeking)
+101random.shuffle(temp_flags)
+102
+103# Gán lại vào mèo
+ὑ7Cấu trúc dữ liệu và giải thuật 4 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+104foriin range(self.N):
+105self.swarm[i].flag = temp_flags[i]
+106
+107defrun_seeking_mode(self, i):
+108"""3. X /hookaboveư lý Ch´ê đô.Tìm ki´êm"""
+109current_cat =self.swarm[i]
+110
+111# Chu /hookaboveân bị mảng đánh d ´âu các chi `êu c`ân thay đ /hookaboveôi
+112dimensions_to_change = [0] *self.M
+113forjin range(self.CDC):
+114dimensions_to_change[j] = 1
+115
+116# Tạo và x /hookaboveư lý các bản sao (SMP bản)
+117copies = []
+118for_in range(self.SMP):
+119# Tạo bản sao vị trí hiê .n tại
+120copy_p = current_cat.P[:]
+121
+122# Xáo trô .n mảng dimensions_to_change cho m ˜ôi bản sao
+123random.shuffle(dimensions_to_change)
+124
+125# Đô .t bi´ên bản sao
+126forjin range(self.M):
+127ifdimensions_to_change[j] == 1:
+128r =self.random_0_1()
+129ifr > 0.5:
+130copy_p[j] +=self.SRD * copy_p[j] *self.random_0_1()
+131else:
+132copy_p[j] -=self.SRD * copy_p[j] *self.random_0_1()
+133copies.append(copy_p)
+134
+135# Chọn ng ˜âu nhiên 1 bản sao đ /hookaboveêcâ.p nhâ.t vị trí mèo
+136selected_idx = random.randint(0,self.SMP - 1)
+137selected_pos = copies[selected_idx]
+138
+139forjin range(self.M):
+140current_cat.P[j] = selected_pos[j]
+141# Ki /hookaboveêm tra biên
+142ifcurrent_cat.P[j] >self.Pmax[j]:
+143current_cat.P[j] =self.Pmax[j]
+144elifcurrent_cat.P[j] <self.Pmin[j]:
+145current_cat.P[j] =self.Pmin[j]
+146
+147defrun_tracing_mode(self, i):
+148"""4. X /hookaboveư lý Ch´ê đô.Truy v´êt"""
+149current_cat =self.swarm[i]
+150best_cat_pos =self.swarm[self.TheBest].P
+151
+152forjin range(self.M):
+153# Câ .p nhâ.t vâ.n t´ôc
+154r =self.random_0_1()
+ὑ7Cấu trúc dữ liệu và giải thuật 5 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+155current_cat.V[j] += r *self.c1 * (best_cat_pos[j] -
+◁arrowhookleft→current_cat.P[j])
+156
+157# Ki /hookaboveêm tra biên vâ .n t´ôc
+158ifcurrent_cat.V[j] >self.VMAX:
+159current_cat.V[j] =self.VMAX
+160elifcurrent_cat.V[j] <self.VMIN:
+161current_cat.V[j] =self.VMIN
+162
+163# Câ .p nhâ.t vị trí
+164current_cat.P[j] += current_cat.V[j]
+165
+166# Ki /hookaboveêm tra biên vị trí
+167ifcurrent_cat.P[j] >self.Pmax[j]:
+168current_cat.P[j] =self.Pmax[j]
+169elifcurrent_cat.P[j] <self.Pmin[j]:
+170current_cat.P[j] =self.Pmin[j]
+171
+172defevaluate(self):
+173"""5. Đánh giá và Câ .p nhâ.t Gbest"""
+174self.TheBest = 0# Reset đ /hookaboveêtìm Best cục bô .vòng này
+175
+176foriin range(self.N):
+177self.swarm[i].Eval =self.OF(self.swarm[i].P)
+178
+179# Câ .p nhâ.t Pbest cá nhân
+180if self.swarm[i].Eval <self.swarm[i].EvalPbest:
+181self.swarm[i].EvalPbest =self.swarm[i].Eval
+182self.swarm[i].Pbest =self.swarm[i].P[:]
+183
+184# Tìm TheBest của vòng lă .p hiê.n tại (đ /hookaboveê dùng cho Tracing vòng sau)
+185if self.swarm[i].Eval <self.swarm[self.TheBest].Eval:
+186self.TheBest = i
+187
+188# Câ .p nhâ.t Gbest toàn cục
+189if self.swarm[self.TheBest].Eval <self.EvalGbest:
+190self.EvalGbest =self.swarm[self.TheBest].Eval
+191self.Gbest =self.swarm[self.TheBest].P[:]
+192
+193defsolve(self):
+194"""Hàm chạy chính"""
+195self.initialize()
+196
+197iteration = 0
+198whileiteration <self.MAX_ITER:
+199iteration += 1
+200self.assign_modes()
+201
+202foriin range(self.N):
+203if self.swarm[i].flag == 0:
+204self.run_seeking_mode(i)
+205else:
+ὑ7Cấu trúc dữ liệu và giải thuật 6 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+206self.run_tracing_mode(i)
+207
+208self.evaluate()
+209
+210print(f"EvalGBest = {self.EvalGbest}")
+211return self.EvalGbest
+212
+213# --- HÀM MAIN ---
+214if__name__ == "__main__":
+215# Thi ´êt lâ.p seed đ /hookaboveêtái lâ.p k´êt quả (tùy chọn)
+216# random.seed(42)
+217
+218# Định nghĩa các tham s ´ô đ`âu vào (Thay vì const)
+219M_input = 5# S ´ô chi`êu
+220N_input = 6# S ´ô lươ.ng mèo
+221SMP_input = 5# Seeking Memory Pool
+222SRD_input = 0.2# Phạm vi tìm ki ´êm
+223CDC_input = 3# S ´ô chi`êu c`ân thay đ /hookaboveôi
+224c1_input = 0.5# H `ăng s´ô gia t´ôc
+225
+226Pmin_input = -5.12
+227Pmax_input = 5.12
+228
+229VMAX_input = 10.0
+230VMIN_input = -10.0
+231MR_input = 0.2# Tỷ lê .h˜ôn hơ.p
+232MAX_ITER_input = 100# S ´ô vòng lă .p t´ôi đa
+233
+234# Kh /hookaboveơi tạo đ ´ôi tươ.ng thuâ.t toán v ´ơi đ`ây đủcác tham s ´ô
+235cso = CatSwarmOptimization(
+236M=M_input,
+237N=N_input,
+238SMP=SMP_input,
+239SRD=SRD_input,
+240CDC=CDC_input,
+241c1=c1_input,
+242Pmin=Pmin_input,
+243Pmax=Pmax_input,
+244VMAX=VMAX_input,
+245VMIN=VMIN_input,
+246MR=MR_input,
+247MAX_ITER=MAX_ITER_input
+248)
+249
+250# Chạy thuâ .t toán
+251cso.solve()
+ὑ7Cấu trúc dữ liệu và giải thuật 7 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+§2 Thuật toán CSO tối ưu (Khác tài liệu)
+Thuật toán 4: Phiên bản toàn cục của CSO (Tối ưu hóa)
+1Khởi tạo ngẫu nhiên quần thể mèoX i(i= 1, . . . , N)vectorMchiều
+2Khởi tạoGbestvà gán vị trí tốt nhất ban đầu choGbest
+3whiletiêu chí dừng chưa thỏa mãnhoặcI < I maxdo
+4Phân loại mèo vàochế độ tìm kiếmhoặctruy vếtdựa trênMR
+5Tính toán độ thích nghi (fitness) và cập nhậtGbest
+6fori←1đếnNdo
+7ifX iở chế độ tìm kiếmthen
+/* Xử lý hành vi tìm kiếm (Seeking Mode) */
+8TạoSMPbản sao củaX i
+9Cập nhật vị trí:X cn=X c×(1±SRD×R)
+10Đánh giá các bản sao và chọn vị trí tốt nhất để di chuyển
+11else
+/* Xử lý hành vi truy vết (Tracing Mode) */
+12Cập nhật vận tốc:v i,d=vi,d+R×c 1×(Gbest d−X i,d)
+13Cập nhật vị trí:X i,d,new =X i,d,old +vi,d
+14end
+15end
+16end
+17returnGbest
+1importrandom
+2importsys
+3
+4classCat:
+5"""
+6L ´ơp đại diê .n cho mô.t con mèo (cá th /hookaboveê)
+7"""
+8def__init__(self, num_dimensions):
+9self.P = [0.0] * num_dimensions# Vị trí
+10self.V = [0.0] * num_dimensions# Vâ .n t´ôc
+11self.Pbest = [0.0] * num_dimensions# Vị trí t ´ôt nh´ât cá nhân (ít dùng
+◁arrowhookleft→trong CSO g ´ôc nhưng gi ˜ư lại theo code bạn)
+12self.Eval = 0.0# Fitness hiê .n tại
+13self.EvalPbest =float(’inf’)# Fitness t ´ôt nh´ât cá nhân
+14self.flag = 0# 0: Seeking, 1: Tracing
+15
+16classCatSwarmOptimization:
+17def__init__(self, M, N, SMP, SRD, CDC, c1, Pmin, Pmax, VMAX, VMIN, MR,
+◁arrowhookleft→MAX_ITER):
+18"""
+19Kh /hookaboveơi tạo thuâ .t toán v ´ơi các tham s ´ô.
+20"""
+ὑ7Cấu trúc dữ liệu và giải thuật 8 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+21self.M = M
+22self.N = N
+23self.SMP = SMP
+24self.SRD = SRD
+25self.CDC = CDC
+26self.c1 = c1
+27self.VMAX = VMAX
+28self.VMIN = VMIN
+29self.MR = MR
+30self.MAX_ITER = MAX_ITER
+31
+32# Các bi ´ên nô.i bô.
+33self.swarm = []# Qu `ân th/hookaboveê mèo
+34self.Gbest = [0.0] * M# Vị trí t ´ôt nh´ât toàn cục
+35self.EvalGbest =float(’inf’)
+36self.TheBest = 0# Chỉ s ´ô của mèo t ´ôt nh´ât hiê.n tại
+37
+38# X /hookaboveư lý gi´ơi hạn không gian (Pmin, Pmax)
+39self.Pmin = [Pmin] * M
+40self.Pmax = [Pmax] * M
+41
+42# --- Các hàm tiê .n ích ---
+43
+44defOF(self, x):
+45"""Hàm mục tiêu (Sphere Function) - Càng nhỏ càng t ´ôt"""
+46t = 0.0
+47forvalinx:
+48t += val * val
+49returnt
+50
+51defrandom_0_1(self):
+52"""Sinh s ´ô ng˜âu nhiên [0, 1]"""
+53returnrandom.random()
+54
+55# --- Các phương th ´ưc chính của thuâ .t toán ---
+56
+57definitialize(self):
+58"""1. Kh /hookaboveơi tạo qu `ân th/hookaboveê"""
+59self.swarm = []
+60foriin range(self.N):
+61cat = Cat(self.M)
+62cat.flag = 0
+63forjin range(self.M):
+64# Random vị trí trong khoảng [Pmin, Pmax]
+65cat.P[j] = (self.Pmax[j] -self.Pmin[j]) *self.random_0_1() +
+◁arrowhookleft→self.Pmin[j]
+66cat.Pbest[j] = cat.P[j]
+67cat.V[j] = 0.0
+68
+69cat.Eval =self.OF(cat.P)
+70cat.EvalPbest = cat.Eval
+71self.swarm.append(cat)
+ὑ7Cấu trúc dữ liệu và giải thuật 9 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+72
+73# Tìm mèo t ´ôt nh´ât ban đ `âu
+74if self.swarm[i].Eval <self.swarm[self.TheBest].Eval:
+75self.TheBest = i
+76
+77# Câ .p nhâ.t Gbest ban đ `âu
+78self.EvalGbest =self.swarm[self.TheBest].Eval
+79self.Gbest =self.swarm[self.TheBest].P[:]
+80
+81defassign_modes(self):
+82"""2. Phân loại ch ´ê đô.(Seeking/Tracing)"""
+83cats_in_seeking =int((1 -self.MR) *self.N)
+84
+85# Tạo danh sách flag: mô .t ph`ân là 0 (Seeking), còn lại là 1 (Tracing)
+86temp_flags = [0] * cats_in_seeking + [1] * (self.N - cats_in_seeking)
+87random.shuffle(temp_flags)
+88
+89# Gán flag cho t `ưng con mèo
+90foriin range(self.N):
+91self.swarm[i].flag = temp_flags[i]
+92
+93defrun_seeking_mode(self, i):
+94"""3. X /hookaboveư lý Ch´ê đô.Tìm ki´êm (T´ÔI ƯU: Chọn bản sao t ´ôt nh´ât)"""
+95current_cat =self.swarm[i]
+96
+97# Mảng đánh d ´âu chi`êu sẽ thay đ /hookaboveôi (CDC chi `êu)
+98dimensions_to_change = [0] *self.M
+99forjin range(self.CDC):
+100dimensions_to_change[j] = 1
+101
+102# Lưu danh sách các bản sao và đi /hookaboveêm s´ô của chúng
+103copies = []
+104copies_fitness = []
+105
+106# Tạo SMP bản sao
+107for_in range(self.SMP):
+108copy_p = current_cat.P[:]
+109
+110# Xáo trô .n mảng đánh d ´âu đ/hookaboveêchọn ng ˜âu nhiên các chi `êu c`ân s/hookaboveưa
+111random.shuffle(dimensions_to_change)
+112
+113# Đô .t bi´ên vị trí bản sao
+114forjin range(self.M):
+115ifdimensions_to_change[j] == 1:
+116r =self.random_0_1()
+117# Công th ´ưc: X_new = X_old +/- SRD * X_old * rand
+118ifr > 0.5:
+119copy_p[j] +=self.SRD * copy_p[j] *self.random_0_1()
+120else:
+121copy_p[j] -=self.SRD * copy_p[j] *self.random_0_1()
+122
+123# Ki /hookaboveêm tra biên ngay lâ .p t´ưc
+ὑ7Cấu trúc dữ liệu và giải thuật 10 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+124forjin range(self.M):
+125ifcopy_p[j] >self.Pmax[j]:
+126copy_p[j] =self.Pmax[j]
+127elifcopy_p[j] <self.Pmin[j]:
+128copy_p[j] =self.Pmin[j]
+129
+130copies.append(copy_p)
+131copies_fitness.append(self.OF(copy_p))
+132
+133# --- PH`ÂN T´ÔI ƯU QUAN TRỌNG ---
+134# Tìm bản sao có fitness nhỏ nh ´ât (t´ôt nh´ât)
+135best_idx = 0
+136best_val = copies_fitness[0]
+137
+138forkin range(1,len(copies_fitness)):
+139ifcopies_fitness[k] < best_val:
+140best_val = copies_fitness[k]
+141best_idx = k
+142
+143# Câ .p nhâ.t mèo sang vị trí t ´ôt nh´ât đó
+144current_cat.P = copies[best_idx][:]
+145# (Lưu ý: Eval sẽ đươ .c tính lại /hookaboveơhàm evaluate() phía dư ´ơi đ/hookaboveêđ`ông bô.)
+146
+147defrun_tracing_mode(self, i):
+148"""4. X /hookaboveư lý Ch´ê đô.Truy v´êt"""
+149current_cat =self.swarm[i]
+150
+151# Dùng Gbest đ /hookaboveêd˜ân hư´ơng (T´ôi ưu hơn dùng P[TheBest] cục bô .)
+152best_pos =self.Gbest
+153
+154forjin range(self.M):
+155# Câ .p nhâ.t vâ.n t´ôc: v = v + c1 * r * (Gbest - x)
+156r =self.random_0_1()
+157current_cat.V[j] += r *self.c1 * (best_pos[j] - current_cat.P[j])
+158
+159# Ki /hookaboveêm tra biên vâ .n t´ôc
+160ifcurrent_cat.V[j] >self.VMAX:
+161current_cat.V[j] =self.VMAX
+162elifcurrent_cat.V[j] <self.VMIN:
+163current_cat.V[j] =self.VMIN
+164
+165# Câ .p nhâ.t vị trí
+166current_cat.P[j] += current_cat.V[j]
+167
+168# Ki /hookaboveêm tra biên vị trí
+169ifcurrent_cat.P[j] >self.Pmax[j]:
+170current_cat.P[j] =self.Pmax[j]
+171elifcurrent_cat.P[j] <self.Pmin[j]:
+172current_cat.P[j] =self.Pmin[j]
+173
+174defevaluate(self):
+175"""5. Đánh giá toàn bô .và Câ.p nhâ.t Gbest"""
+ὑ7Cấu trúc dữ liệu và giải thuật 11 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+176self.TheBest = 0# Reset
+177
+178foriin range(self.N):
+179# Tính toán Fitness m ´ơi
+180self.swarm[i].Eval =self.OF(self.swarm[i].P)
+181
+182# Câ .p nhâ.t Pbest cá nhân (n ´êu c`ân)
+183if self.swarm[i].Eval <self.swarm[i].EvalPbest:
+184self.swarm[i].EvalPbest =self.swarm[i].Eval
+185self.swarm[i].Pbest =self.swarm[i].P[:]
+186
+187# Tìm con t ´ôt nh´ât trong vòng lă .p này
+188if self.swarm[i].Eval <self.swarm[self.TheBest].Eval:
+189self.TheBest = i
+190
+191# Câ .p nhâ.t Gbest toàn cục n ´êu tìm th ´ây giải pháp t ´ôt hơn lịch s /hookaboveư
+192if self.swarm[self.TheBest].Eval <self.EvalGbest:
+193self.EvalGbest =self.swarm[self.TheBest].Eval
+194self.Gbest =self.swarm[self.TheBest].P[:]
+195
+196defsolve(self):
+197"""Hàm chạy chính"""
+198self.initialize()
+199
+200print(f"Start Optimization with {self.MAX_ITER} iterations...")
+201iteration = 0
+202whileiteration <self.MAX_ITER:
+203iteration += 1
+204
+205# 1. Chia nhóm
+206self.assign_modes()
+207
+208# 2. Chạy t `ưng ch´ê đô.cho t`ưng con mèo
+209foriin range(self.N):
+210if self.swarm[i].flag == 0:
+211self.run_seeking_mode(i)
+212else:
+213self.run_tracing_mode(i)
+214
+215# 3. Đánh giá và câ .p nhâ.t Gbest
+216self.evaluate()
+217
+218# In k ´êt quả t `ưng vòng (tùy chọn)
+219# print(f"Iter {iteration}: Best Fitness = {self.EvalGbest}")
+220
+221print(f"Final EvalGBest = {self.EvalGbest}")
+222return self.EvalGbest
+223
+224# --- HÀM MAIN ---
+225if__name__ == "__main__":
+226# Thi ´êt lâ.p tham s ´ô (như code m ˜âu của bạn)
+227M_input = 5
+ὑ7Cấu trúc dữ liệu và giải thuật 12 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+228N_input = 6
+229SMP_input = 5
+230SRD_input = 0.2
+231CDC_input = 3
+232c1_input = 2.05# Thư `ơng dùng 2.05, code bạn là 0.5 (tùy chỉnh)
+233
+234Pmin_input = -5.12
+235Pmax_input = 5.12
+236
+237VMAX_input = 10.0
+238VMIN_input = -10.0
+239MR_input = 0.2
+240MAX_ITER_input = 100
+241
+242# Kh /hookaboveơi tạo thuâ .t toán
+243cso = CatSwarmOptimization(
+244M=M_input,
+245N=N_input,
+246SMP=SMP_input,
+247SRD=SRD_input,
+248CDC=CDC_input,
+249c1=c1_input,
+250Pmin=Pmin_input,
+251Pmax=Pmax_input,
+252VMAX=VMAX_input,
+253VMIN=VMIN_input,
+254MR=MR_input,
+255MAX_ITER=MAX_ITER_input
+256)
+257
+258# Chạy
+259cso.solve()
+ὑ7Cấu trúc dữ liệu và giải thuật 13 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+§3 Thuật toán PSO
+Thuật toán 4: Phiên bản toàn cục của PSO
+1Xác định hàm mục tiêuDchiềuOF(.)
+2Xác định phạm vi biến thiên cho mỗi chiều thứj:[Pmin
+i,j, Pmax
+i,j]
+3Xác định các tham số PSO nhưN– số lượng hạt,c 1, c2– hệ số học tập
+4Tạo ngẫu nhiên bầyPgồmNhạt (mỗi hạt là vectorDchiều)
+5Tạo vectorGbest Dchiều
+6formỗi hạt thứi(P i) trong bầyPdo
+7Tạo hạtPbest ibằng với hạt thứi(P i)
+8Tạo vận tốcV icho mỗi hạtP i
+9Đánh giá hạtP isử dụng hàmOF(.)
+10end
+11Gán hạtP itốt nhất choGbest
+12whileđiều kiện dừng chưa thỏa mãndo
+13formỗi hạtitrong bầyPdo
+14formỗi chiềujdo
+15Cập nhật vận tốcV i,jsử dụng công thức:
+16V i,j=Vi,j+c 1·r1·(Pbest i,j−P i,j) +c 2·r2·(Gbest j−P i,j)
+17Cập nhật vị trí hạtP i,jsử dụng công thức:
+18P i,j=P i,j+Vi,j
+19ifP i,j< Pmin
+jthen
+20P i,j=Pmin
+j
+21end
+22ifP i,j> Pmax
+jthen
+23P i,j=Pmax
+j
+24end
+25end
+26Đánh giá hạtP isử dụng hàmOF(.)
+27ifOF(P i)tốt hơnOF(Pbest i)then
+28Gán hạtP icho hạtPbest i
+29end
+30end
+31Chọn hạt tốt nhất từ bầyPvà gán cho hạtT
+32ifOF(T)tốt hơnOF(Gbest)then
+33Gán hạtTcho hạtGbest
+34end
+35end
+36returnGbestnhư là một kết quả
+1importrandom
+2importsys
+3
+ὑ7Cấu trúc dữ liệu và giải thuật 14 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+4classParticleSwarmOptimization:
+5def__init__(self, N, MAX_ITER, D, c1, c2, Pmin_val, Pmax_val):
+6"""
+7Kh /hookaboveơi tạo thuâ .t toán PSO v ´ơi các tham s ´ô đ`âu vào.
+8"""
+9# --- Initialization of the parameters (t `ư input) ---
+10self.N = N# Kích thư ´ơc qu`ân th/hookaboveê
+11self.MAX = MAX_ITER# S ´ô vòng lă .p t´ôi đa
+12self.D = D# S ´ô chi`êu
+13self.c1 = c1
+14self.c2 = c2
+15self.Iter = 0
+16self.TheBest = 0
+17self.EvalGbest =float(’inf’)# Kh /hookaboveơi tạo giá trị l ´ơn vô cùng
+18
+19# Initialization of the constraints
+20# Trong C++ dùng mảng, /hookaboveơđây ta tạo list Python tương ´ưng
+21self.Pmin = [Pmin_val] * D
+22self.Pmax = [Pmax_val] * D
+23
+24# Initialization of all data structures needed by PSO
+25self.P = [[0.0] * Dfor_in range(N)]# Vị trí
+26self.V = [[0.0] * Dfor_in range(N)]# Vâ .n t´ôc
+27self.Pbest = [[0.0] * Dfor_in range(N)]# Vị trí t ´ôt nh´ât cá nhân
+28self.Eval = [0.0] * N# Giá trị fitness hiê .n tại
+29self.EvalPbest = [0.0] * N# Giá trị fitness t ´ôt nh´ât cá nhân
+30self.Gbest = [0.0] * D# Vị trí t ´ôt nh´ât toàn cục
+31
+32# definition of the objective function OF(.)
+33defOF(self, x):
+34t = 0.0
+35forvalinx:
+36t += val * val
+37returnt
+38
+39# generate pseudo random values from the range [0, 1)
+40defr(self):
+41# Mô phỏng logic (rand()%1000)/1000 của C++
+42# Trong Python random.random() trả v `ê [0.0, 1.0) chu /hookaboveân xác hơn
+43returnrandom.random()
+44
+45defsolve(self):
+46"""Hàm thư .c thi chính của thuâ .t toán"""
+47
+48# randomly create swarm P and Pbest; create velocity vectors V
+49foriin range(self.N):
+50forjin range(self.D):
+51# P[i][j] = (Pmax[j] - Pmin[j]) * r() + Pmin[j]
+52self.P[i][j] = (self.Pmax[j] -self.Pmin[j]) *self.r() +
+◁arrowhookleft→self.Pmin[j]
+53self.Pbest[i][j] =self.P[i][j]
+54self.V[i][j] = 0.0
+ὑ7Cấu trúc dữ liệu và giải thuật 15 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+55
+56# evaluate all the particles in the swarm P
+57self.Eval[i] =self.OF(self.P[i])
+58self.EvalPbest[i] =self.Eval[i]
+59
+60# find the best particle in the swarm P
+61# Lưu ý: L `ân chạy đ `âu tiên so sánh v ´ơi TheBest=0
+62if self.Eval[i] <self.Eval[self.TheBest]:
+63self.TheBest = i
+64
+65# assign the best particle to Gbest
+66forjin range(self.D):
+67self.Gbest[j] =self.P[self.TheBest][j]
+68self.EvalGbest =self.Eval[self.TheBest]
+69
+70# main program loop
+71while self.Iter <self.MAX:
+72self.Iter += 1
+73self.TheBest = 0# Reset chỉ s ´ô t´ôt nh´ât cục bô .đ`âu vòng lă .p
+74
+75foriin range(self.N):
+76forjin range(self.D):
+77# for each particle compute the velocity vector
+78# V[i][j] = V[i][j] + c1*r()*(Pbest[i][j]-P[i][j]) +
+◁arrowhookleft→c2*r()*(Gbest[j]-P[i][j])
+79r1 =self.r()
+80r2 =self.r()
+81self.V[i][j] =self.V[i][j] + \
+82self.c1 * r1 * (self.Pbest[i][j] -
+◁arrowhookleft→self.P[i][j]) + \
+83self.c2 * r2 * (self.Gbest[j] -self.P[i][j])
+84
+85# update each particle using velocity vector
+86self.P[i][j] =self.P[i][j] +self.V[i][j]
+87
+88# check the constraints for each dimension
+89if self.P[i][j] <self.Pmin[j]:
+90self.P[i][j] =self.Pmin[j]
+91if self.P[i][j] >self.Pmax[j]:
+92self.P[i][j] =self.Pmax[j]
+93
+94# evaluate each particle from the swarm P
+95self.Eval[i] =self.OF(self.P[i])
+96
+97# Update Pbest
+98if self.Eval[i] <self.EvalPbest[i]:
+99self.EvalPbest[i] =self.Eval[i]
+100# for each particle update its Pbest vector
+101forjin range(self.D):
+102self.Pbest[i][j] =self.P[i][j]
+103
+104# Tìm ph `ân t/hookaboveư t´ôt nh´ât trong vòng lă .p hiê.n tại đ/hookaboveêcâ.p nhâ.t Gbest
+ὑ7Cấu trúc dữ liệu và giải thuật 16 Nội Bộ
+Lập trình thi đấu - phỏng vấn
+◁arrowhookleft→sau này
+105if self.Eval[i] <self.Eval[self.TheBest]:
+106self.TheBest = i
+107
+108# update Gbest vector if better particle is found
+109if self.Eval[self.TheBest] <self.EvalGbest:
+110forjin range(self.D):
+111self.Gbest[j] =self.P[self.TheBest][j]
+112self.EvalGbest =self.Eval[self.TheBest]
+113
+114# K ´êt quả cu ´ôi cùng
+115print(f"EvalGbest = {self.EvalGbest}")
+116
+117
+118# --- HÀM MAIN ---
+119if__name__ == "__main__":
+120# Thi ´êt lâ.p seed ng ˜âu nhiên gi ´ông C++ (srand(time(NULL)))
+121# random.seed() # Mă .c định Python dùng th `ơi gian hê .th´ông
+122
+123# Nhâ .p tham s ´ô c´âu hình (Input parameters)
+124# Thay vì const hardcode, ta định nghĩa bi ´ên/hookaboveơđây đ/hookaboveêtruy`ên vào class
+125N_input = 100
+126MAX_input = 100
+127D_input = 20
+128c1_input = 2.0
+129c2_input = 2.0
+130Pmin_input = -5.12
+131Pmax_input = 5.12
+132
+133# Kh /hookaboveơi tạo đ ´ôi tươ.ng PSO v ´ơi các tham s ´ô đô.ng
+134pso_solver = ParticleSwarmOptimization(
+135N=N_input,
+136MAX_ITER=MAX_input,
+137D=D_input,
+138c1=c1_input,
+139c2=c2_input,
+140Pmin_val=Pmin_input,
+141Pmax_val=Pmax_input
+142)
+143
+144# Chạy thuâ .t toán
+145pso_solver.solve()
+ὑ7Cấu trúc dữ liệu và giải thuật 17 Nội Bộ

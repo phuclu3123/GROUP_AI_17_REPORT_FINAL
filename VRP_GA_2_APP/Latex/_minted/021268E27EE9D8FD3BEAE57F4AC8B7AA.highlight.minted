@@ -1,0 +1,11 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+ga\PYGZus{}core/
+|\PYGZhy{}\PYGZhy{} chromosome.py    \PYGZsh{} Biểu diễn lời giải (cá thể)
+|\PYGZhy{}\PYGZhy{} cost\PYGZus{}matrix.py   \PYGZsh{} Xây dựng ma trận chi phí
+|\PYGZhy{}\PYGZhy{} fitness.py       \PYGZsh{} Hàm đánh giá chất lượng lời giải
+|\PYGZhy{}\PYGZhy{} selection.py     \PYGZsh{} Chọn lọc cha mẹ
+|\PYGZhy{}\PYGZhy{} crossover.py     \PYGZsh{} Lai ghép tạo con cái
+|\PYGZhy{}\PYGZhy{} mutation.py      \PYGZsh{} Đột biến duy trì đa dạng
+|\PYGZhy{}\PYGZhy{} ga\PYGZus{}engine.py     \PYGZsh{} Vòng lặp GA chính (PyQt6 thread)
+\PYGZbs{}\PYGZhy{}\PYGZhy{} ga\PYGZus{}runner.py     \PYGZsh{} Runner độc lập (không GUI)
+\end{MintedVerbatim}

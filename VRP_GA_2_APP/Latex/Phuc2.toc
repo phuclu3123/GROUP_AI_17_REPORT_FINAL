@@ -1,0 +1,73 @@
+\contentsline {section}{TÓM TẮT}{}{section*.1}%
+\contentsline {section}{LỜI CẢM ƠN}{}{section*.2}%
+\contentsline {section}{DANH MỤC THUẬT NGỮ VÀ KÝ HIỆU TOÁN HỌC}{}{section*.3}%
+\contentsline {section}{\numberline {1}TỔNG QUAN VÀ CƠ SỞ LÝ THUYẾT}{1}{section.4}%
+\contentsline {subsection}{\numberline {1.1}Đặt vấn đề}{1}{subsection.5}%
+\contentsline {subsection}{\numberline {1.2}Giới thiệu bài toán Vehicle Routing Problem}{1}{subsection.6}%
+\contentsline {subsection}{\numberline {1.3}Một số biến thể chính của VRP}{2}{subsection.7}%
+\contentsline {section}{\numberline {2}GIẢI THUẬT DI TRUYỀN}{2}{section.9}%
+\contentsline {subsection}{\numberline {2.1}Các thành phần cơ bản của GA}{3}{subsection.10}%
+\contentsline {subsection}{\numberline {2.2}Sơ đồ tổng quát của Giải thuật Di truyền}{3}{subsection.11}%
+\contentsline {subsection}{\numberline {2.3}Biểu diễn cá thể và không gian nghiệm}{5}{subsection.14}%
+\contentsline {subsection}{\numberline {2.4}Hàm fitness và hàm mục tiêu}{5}{subsection.15}%
+\contentsline {subsection}{\numberline {2.5}Chọn lọc cá thể}{6}{subsection.16}%
+\contentsline {subsection}{\numberline {2.6}Lai ghép và đột biến}{6}{subsection.18}%
+\contentsline {subsection}{\numberline {2.7}Điều kiện dừng và đánh giá hội tụ}{6}{subsection.20}%
+\contentsline {section}{\numberline {3}ỨNG DỤNG GIẢI THUẬT DI TRUYỀN VÀO BÀI TOÁN VRP (CƠ BẢN)}{7}{section.21}%
+\contentsline {subsection}{\numberline {3.1}Tổng quan}{7}{subsection.22}%
+\contentsline {subsection}{\numberline {3.2}Mô hình hóa không gian lời giải (Solution Space Modeling)}{7}{subsection.25}%
+\contentsline {subsubsection}{\numberline {3.2.1}Cấu trúc Chromosome và Cơ chế bảo toàn di truyền}{7}{subsubsection.26}%
+\contentsline {subsubsection}{\numberline {3.2.2}Cơ chế Giải mã (Decoding) và Heuristic tối ưu hóa Trạm trung chuyển}{10}{subsubsection.32}%
+\contentsline {subsubsection}{\numberline {3.2.3}Tiền xử lý Không gian Môi trường (Ma trận Chi phí)}{11}{subsubsection.34}%
+\contentsline {subsection}{\numberline {3.3}Khởi tạo Quần thể Ban đầu (Initial Population Generation)}{12}{subsection.37}%
+\contentsline {subsection}{\numberline {3.4}Đánh giá Độ thích nghi (Fitness Evaluation)}{13}{subsection.41}%
+\contentsline {subsubsection}{\numberline {3.4.1}Mô hình hóa Hàm Mục tiêu (Objective Function)}{13}{subsubsection.42}%
+\contentsline {subsubsection}{\numberline {3.4.2}Phép biến đổi Độ thích nghi (Fitness Transformation)}{14}{subsubsection.43}%
+\contentsline {subsection}{\numberline {3.5}Cơ chế Chọn lọc (Selection Mechanism)}{16}{subsection.47}%
+\contentsline {subsubsection}{\numberline {3.5.1}Lựa chọn Bánh xe Roulette (Roulette Wheel Selection) và Rủi ro Hội tụ sớm}{16}{subsubsection.48}%
+\contentsline {subsubsection}{\numberline {3.5.2}Chọn lọc Tranh đấu (Tournament Selection) - Giải pháp Tối ưu cho VRP}{17}{subsubsection.49}%
+\contentsline {subsection}{\numberline {3.6}Toán tử Lai ghép (Crossover Mechanism)}{18}{subsection.53}%
+\contentsline {subsubsection}{\numberline {3.6.1}Cơ chế Lai ghép Thứ tự (Order Crossover - OX)}{18}{subsubsection.54}%
+\contentsline {subsubsection}{\numberline {3.6.2}Chiến lược Kế thừa Phân cụm (Clustering Inheritance)}{19}{subsubsection.59}%
+\contentsline {subsection}{\numberline {3.7}Toán tử Đột biến (Mutation Mechanism)}{20}{subsection.62}%
+\contentsline {subsubsection}{\numberline {3.7.1}Đột biến Không gian Định tuyến (Routing Mutation)}{20}{subsubsection.63}%
+\contentsline {subsubsection}{\numberline {3.7.2}Đột biến Không gian Phân cụm (Clustering Mutation)}{21}{subsubsection.64}%
+\contentsline {subsection}{\numberline {3.8}Hoàn thiện Vòng lặp Tiến hóa và Chiến lược Quản trị Quần thể}{22}{subsection.68}%
+\contentsline {subsubsection}{\numberline {3.8.1}Chiến lược Thay thế Quần thể $(\mu + \lambda )$ và Bảo tồn Tinh hoa}{23}{subsubsection.69}%
+\contentsline {subsubsection}{\numberline {3.8.2}Tối ưu Hóa Điện toán với Đánh giá Lười (Lazy Evaluation)}{23}{subsubsection.73}%
+\contentsline {subsubsection}{\numberline {3.8.3}Khống chế Hội tụ và Cơ chế Dừng sớm (Early Stopping)}{24}{subsubsection.74}%
+\contentsline {section}{\numberline {4}MỞ RỘNG BÀI TOÁN VRP THÀNH CVRP VÀ VRPTW}{26}{section.78}%
+\contentsline {subsection}{\numberline {4.1}Định hướng mở rộng mô hình}{26}{subsection.79}%
+\contentsline {subsection}{\numberline {4.2}Mở rộng ràng buộc tải trọng: Capacitated VRP}{27}{subsection.80}%
+\contentsline {subsubsection}{\numberline {4.2.1}Mô hình tải trọng trên từng tuyến}{27}{subsubsection.81}%
+\contentsline {subsubsection}{\numberline {4.2.2}Hàm phạt vượt tải}{27}{subsubsection.82}%
+\contentsline {subsection}{\numberline {4.3}Mở rộng ràng buộc thời gian: VRP with Time Windows}{28}{subsection.83}%
+\contentsline {subsubsection}{\numberline {4.3.1}Mô hình cửa sổ thời gian}{28}{subsubsection.84}%
+\contentsline {subsubsection}{\numberline {4.3.2}Cơ chế chờ sớm và phạt trễ}{28}{subsubsection.85}%
+\contentsline {subsection}{\numberline {4.4}Hàm mục tiêu mở rộng}{29}{subsection.86}%
+\contentsline {subsection}{\numberline {4.5}Thuật toán đánh giá cá thể trong mô hình mở rộng}{30}{subsection.87}%
+\contentsline {subsection}{\numberline {4.6}Liên hệ với kiến trúc cài đặt}{32}{subsection.91}%
+\contentsline {subsection}{\numberline {4.7}Nhận xét về mô hình mở rộng}{34}{subsection.92}%
+\contentsline {section}{\numberline {5}THIẾT KẾ GIAO DIỆN}{34}{section.93}%
+\contentsline {subsection}{\numberline {5.1}Mục tiêu và bố cục tổng thể}{34}{subsection.94}%
+\contentsline {subsection}{\numberline {5.2}Màn hình Điều phối và thiết lập bài toán}{35}{subsection.96}%
+\contentsline {subsection}{\numberline {5.3}Trực quan hóa, dashboard và luồng sử dụng}{36}{subsection.99}%
+\contentsline {subsection}{\numberline {5.4}Đánh giá thiết kế giao diện}{37}{subsection.103}%
+\contentsline {section}{\numberline {6}CÁC KẾT QUẢ THỰC NGHIỆM - ĐÁNH GIÁ HIỆU NĂNG}{37}{section.104}%
+\contentsline {subsection}{\numberline {6.1}Mục tiêu và thiết lập thực nghiệm}{37}{subsection.105}%
+\contentsline {subsection}{\numberline {6.2}Dữ liệu, trực quan hóa và tiêu chí đánh giá}{38}{subsection.107}%
+\contentsline {subsection}{\numberline {6.3}Kết quả trên mô hình VRP cơ bản}{39}{subsection.109}%
+\contentsline {subsection}{\numberline {6.4}Kết quả trên mô hình CVRP và VRPTW}{39}{subsection.112}%
+\contentsline {subsection}{\numberline {6.5}So sánh tổng hợp và độ ổn định}{41}{subsection.115}%
+\contentsline {subsection}{\numberline {6.6}Phân tích hội tụ và nhận xét hiệu năng}{41}{subsection.119}%
+\contentsline {section}{\numberline {7}KẾT LUẬN}{42}{section.121}%
+\contentsline {subsection}{\numberline {7.1}Tổng kết nội dung và kết quả đạt được}{42}{subsection.122}%
+\contentsline {subsection}{\numberline {7.2}Ý nghĩa và hạn chế}{43}{subsection.123}%
+\contentsline {subsection}{\numberline {7.3}Hướng phát triển}{43}{subsection.124}%
+\contentsline {subsection}{\numberline {7.4}Kết luận chung}{43}{subsection.125}%
+\contentsline {section}{Tài liệu tham khảo}{44}{section*.126}%
+\contentsline {section}{Phụ lục A. Hình ảnh}{45}{section*.127}%
+\contentsline {section}{Phụ lục B. Các thuật toán}{46}{section*.128}%
+\contentsline {section}{Phụ lục C. Bảng, biểu}{47}{section*.129}%
+\contentsline {section}{Bảng phân công nhiệm vụ}{48}{section*.130}%
+\contentsline {section}{Link đồ án}{48}{section*.131}%

@@ -1,0 +1,26 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Capacity Penalty}
+\PYG{k}{if} \PYG{n}{route\PYGZus{}demand} \PYG{o}{\PYGZgt{}} \PYG{n}{max\PYGZus{}capacity}\PYG{p}{:}
+    \PYG{n}{overflow} \PYG{o}{=} \PYG{n}{route\PYGZus{}demand} \PYG{o}{\PYGZhy{}} \PYG{n}{max\PYGZus{}capacity}
+    \PYG{n}{penalty\PYGZus{}cost} \PYG{o}{+=} \PYG{n}{capacity\PYGZus{}penalty\PYGZus{}weight} \PYG{o}{*} \PYG{n}{overflow}
+    \PYG{n}{total\PYGZus{}conflicts} \PYG{o}{+=} \PYG{l+m+mi}{1}
+
+\PYG{c+c1}{\PYGZsh{} Time Window Penalty}
+\PYG{k}{if} \PYG{n}{use\PYGZus{}tw} \PYG{o+ow}{and} \PYG{n}{time\PYGZus{}windows} \PYG{o+ow}{and} \PYG{n}{service\PYGZus{}times}\PYG{p}{:}
+    \PYG{n}{travel\PYGZus{}time} \PYG{o}{=} \PYG{n}{dist} \PYG{o}{/} \PYG{n}{\PYGZus{}SPEED\PYGZus{}KM\PYGZus{}PER\PYGZus{}MIN}
+    \PYG{n}{current\PYGZus{}time} \PYG{o}{+=} \PYG{n}{travel\PYGZus{}time}
+
+    \PYG{k}{if} \PYG{n}{c2} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{depot\PYGZus{}set}\PYG{p}{:}
+        \PYG{n}{ready}\PYG{p}{,} \PYG{n}{due} \PYG{o}{=} \PYG{n}{time\PYGZus{}windows}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1440}\PYG{p}{))}
+
+        \PYG{k}{if} \PYG{n}{current\PYGZus{}time} \PYG{o}{\PYGZlt{}} \PYG{n}{ready}\PYG{p}{:}
+            \PYG{n}{current\PYGZus{}time} \PYG{o}{=} \PYG{n}{ready}
+
+        \PYG{k}{if} \PYG{n}{current\PYGZus{}time} \PYG{o}{\PYGZgt{}} \PYG{n}{due}\PYG{p}{:}
+            \PYG{n}{penalty\PYGZus{}cost} \PYG{o}{+=} \PYG{p}{(}
+                \PYG{n}{current\PYGZus{}time} \PYG{o}{\PYGZhy{}} \PYG{n}{due}
+            \PYG{p}{)} \PYG{o}{*} \PYG{n}{time\PYGZus{}window\PYGZus{}penalty\PYGZus{}weight}
+            \PYG{n}{total\PYGZus{}conflicts} \PYG{o}{+=} \PYG{l+m+mi}{1}
+
+        \PYG{n}{current\PYGZus{}time} \PYG{o}{+=} \PYG{n}{service\PYGZus{}times}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+\end{MintedVerbatim}

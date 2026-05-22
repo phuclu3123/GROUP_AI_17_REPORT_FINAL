@@ -1,0 +1,34 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{\PYGZus{}invalidate}\PYG{p}{(}\PYG{n}{chromosome}\PYG{p}{:} \PYG{n}{Chromosome}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{Chromosome}\PYG{p}{:}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{fitness} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{travel\PYGZus{}cost} \PYG{o}{=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}inf\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{handling\PYGZus{}cost} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{penalty\PYGZus{}cost} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{total\PYGZus{}cost} \PYG{o}{=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}inf\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{conflicts} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{return} \PYG{n}{chromosome}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{swap\PYGZus{}mutation}\PYG{p}{(}\PYG{n}{chromosome}\PYG{p}{:} \PYG{n}{Chromosome}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{Chromosome}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Hoán đổi 2 thành phố ngẫu nhiên trong genes.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{n}{c} \PYG{o}{=} \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{()}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{n} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{2}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n}{c}
+    \PYG{n}{i}\PYG{p}{,} \PYG{n}{j} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{sample}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n}\PYG{p}{),} \PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{],} \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{\PYGZus{}invalidate}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{insertion\PYGZus{}mutation}\PYG{p}{(}\PYG{n}{chromosome}\PYG{p}{:} \PYG{n}{Chromosome}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{Chromosome}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Rút 1 gene và chèn vào vị trí ngẫu nhiên.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{n}{c} \PYG{o}{=} \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{()}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{n} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{2}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n}{c}
+    \PYG{n}{i} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{randrange}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+    \PYG{n}{gene} \PYG{o}{=} \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{o}{.}\PYG{n}{pop}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{j} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{randrange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{c}\PYG{o}{.}\PYG{n}{genes}\PYG{o}{.}\PYG{n}{insert}\PYG{p}{(}\PYG{n}{j}\PYG{p}{,} \PYG{n}{gene}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{\PYGZus{}invalidate}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)}
+\end{MintedVerbatim}

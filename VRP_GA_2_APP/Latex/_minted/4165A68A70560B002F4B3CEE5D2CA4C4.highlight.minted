@@ -1,0 +1,69 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{evaluate}\PYG{p}{(}
+    \PYG{n}{chromosome}\PYG{p}{:} \PYG{n}{Chromosome}\PYG{p}{,}
+    \PYG{n}{depots}\PYG{p}{:} \PYG{n}{List}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{],}
+    \PYG{n}{cost\PYGZus{}matrix}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,}
+    \PYG{n}{city\PYGZus{}index}\PYG{p}{:} \PYG{n}{Dict}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{],}
+    \PYG{n}{handling\PYGZus{}fees}\PYG{p}{:} \PYG{n}{Dict}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n+nb}{float}\PYG{p}{],}
+    \PYG{n}{demands}\PYG{p}{:} \PYG{n}{Dict}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{],}
+    \PYG{n}{max\PYGZus{}capacity}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,}
+    \PYG{n}{time\PYGZus{}windows}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n}{Dict}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{Tuple}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{]]]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{n}{service\PYGZus{}times}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n}{Dict}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{]]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{n}{use\PYGZus{}tw}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{,}
+    \PYG{n}{capacity\PYGZus{}penalty\PYGZus{}weight}\PYG{p}{:} \PYG{n+nb}{float} \PYG{o}{=} \PYG{n}{DEFAULT\PYGZus{}CAPACITY\PYGZus{}PENALTY\PYGZus{}WEIGHT}\PYG{p}{,}
+    \PYG{n}{time\PYGZus{}window\PYGZus{}penalty\PYGZus{}weight}\PYG{p}{:} \PYG{n+nb}{float} \PYG{o}{=} \PYG{n}{DEFAULT\PYGZus{}TIME\PYGZus{}WINDOW\PYGZus{}PENALTY\PYGZus{}WEIGHT}\PYG{p}{,}
+    \PYG{n}{invalid\PYGZus{}edge\PYGZus{}penalty}\PYG{p}{:} \PYG{n+nb}{float} \PYG{o}{=} \PYG{n}{DEFAULT\PYGZus{}INVALID\PYGZus{}EDGE\PYGZus{}PENALTY}\PYG{p}{,}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{routes} \PYG{o}{=} \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{get\PYGZus{}routes}\PYG{p}{(}\PYG{n}{depots}\PYG{p}{,} \PYG{n}{cost\PYGZus{}matrix}\PYG{p}{,} \PYG{n}{city\PYGZus{}index}\PYG{p}{)}
+    \PYG{n}{depot\PYGZus{}set} \PYG{o}{=} \PYG{n+nb}{set}\PYG{p}{(}\PYG{n}{depots}\PYG{p}{)}
+
+    \PYG{n}{travel\PYGZus{}cost} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{handling\PYGZus{}cost} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{penalty\PYGZus{}cost} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{total\PYGZus{}conflicts} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+    \PYG{k}{for} \PYG{n}{route} \PYG{o+ow}{in} \PYG{n}{routes}\PYG{p}{:}
+        \PYG{n}{route\PYGZus{}demand} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n}{current\PYGZus{}time} \PYG{o}{=} \PYG{l+m+mf}{480.0}
+        \PYG{n}{visited\PYGZus{}for\PYGZus{}fee} \PYG{o}{=} \PYG{n+nb}{set}\PYG{p}{()}
+
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{route}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{n}{c1}\PYG{p}{,} \PYG{n}{c2} \PYG{o}{=} \PYG{n}{route}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{route}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+            \PYG{n}{idx1} \PYG{o}{=} \PYG{n}{city\PYGZus{}index}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+            \PYG{n}{idx2} \PYG{o}{=} \PYG{n}{city\PYGZus{}index}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+
+            \PYG{k}{if} \PYG{n}{idx1} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{o+ow}{or} \PYG{n}{idx2} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{:}
+                \PYG{n}{penalty\PYGZus{}cost} \PYG{o}{+=} \PYG{n}{invalid\PYGZus{}edge\PYGZus{}penalty}
+                \PYG{n}{total\PYGZus{}conflicts} \PYG{o}{+=} \PYG{l+m+mi}{1}
+                \PYG{k}{continue}
+
+            \PYG{n}{dist} \PYG{o}{=} \PYG{n}{cost\PYGZus{}matrix}\PYG{p}{[}\PYG{n}{idx1}\PYG{p}{,} \PYG{n}{idx2}\PYG{p}{]}
+            \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{np}\PYG{o}{.}\PYG{n}{isfinite}\PYG{p}{(}\PYG{n}{dist}\PYG{p}{):}
+                \PYG{n}{penalty\PYGZus{}cost} \PYG{o}{+=} \PYG{n}{invalid\PYGZus{}edge\PYGZus{}penalty}
+                \PYG{n}{total\PYGZus{}conflicts} \PYG{o}{+=} \PYG{l+m+mi}{1}
+                \PYG{k}{continue}
+
+            \PYG{n}{travel\PYGZus{}cost} \PYG{o}{+=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{dist}\PYG{p}{)}
+
+            \PYG{k}{if} \PYG{n}{c2} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{depot\PYGZus{}set} \PYG{o+ow}{and} \PYG{n}{c2} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{visited\PYGZus{}for\PYGZus{}fee}\PYG{p}{:}
+                \PYG{n}{handling\PYGZus{}cost} \PYG{o}{+=} \PYG{n}{handling\PYGZus{}fees}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{,} \PYG{l+m+mf}{0.0}\PYG{p}{)}
+                \PYG{n}{visited\PYGZus{}for\PYGZus{}fee}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{)}
+
+            \PYG{k}{if} \PYG{n}{c2} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{depot\PYGZus{}set}\PYG{p}{:}
+                \PYG{n}{route\PYGZus{}demand} \PYG{o}{+=} \PYG{n}{demands}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+
+            \PYG{c+c1}{\PYGZsh{} Các ràng buộc mở rộng như Time Window được phân tích ở Chương 4.}
+            \PYG{o}{...}
+
+        \PYG{c+c1}{\PYGZsh{} Ràng buộc tải trọng CVRP được phân tích chi tiết ở Chương 4.}
+        \PYG{o}{...}
+
+    \PYG{n}{total\PYGZus{}cost} \PYG{o}{=} \PYG{n}{travel\PYGZus{}cost} \PYG{o}{+} \PYG{n}{handling\PYGZus{}cost} \PYG{o}{+} \PYG{n}{penalty\PYGZus{}cost}
+
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{travel\PYGZus{}cost} \PYG{o}{=} \PYG{n}{travel\PYGZus{}cost}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{handling\PYGZus{}cost} \PYG{o}{=} \PYG{n}{handling\PYGZus{}cost}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{penalty\PYGZus{}cost} \PYG{o}{=} \PYG{n}{penalty\PYGZus{}cost}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{total\PYGZus{}cost} \PYG{o}{=} \PYG{n}{total\PYGZus{}cost}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{fitness} \PYG{o}{=} \PYG{l+m+mf}{1.0} \PYG{o}{/} \PYG{n}{total\PYGZus{}cost} \PYG{k}{if} \PYG{n}{total\PYGZus{}cost} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{k}{else} \PYG{l+m+mf}{0.0}
+    \PYG{n}{chromosome}\PYG{o}{.}\PYG{n}{conflicts} \PYG{o}{=} \PYG{n}{total\PYGZus{}conflicts}
+\end{MintedVerbatim}
