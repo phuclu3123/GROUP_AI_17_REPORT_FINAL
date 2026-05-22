@@ -46,6 +46,16 @@ Dự án mô hình hóa vấn đề này bằng nhóm bài toán VRP:
 - Có chế độ so sánh GA với CSO theo chất lượng nghiệm và thời gian chạy.
 - Có CI và release workflow để kiểm tra code, build Windows executable và publish bản tải về.
 
+## Giao Diện Ứng Dụng
+
+![Màn hình điều phối chính](resources/UI1.jpg)
+
+![Bản đồ và tuyến xe sau khi tối ưu](resources/UI2.jpg)
+
+![Biểu đồ hội tụ thuật toán](resources/UI3.jpg)
+
+![Dashboard kết quả và báo cáo tuyến](resources/UI4.jpg)
+
 ## Công Nghệ Sử Dụng
 
 | Nhóm | Công nghệ |
@@ -188,6 +198,7 @@ Ngoài dữ liệu built-in, ứng dụng hỗ trợ:
 .
 ├── README.md                         Tài liệu giới thiệu chính của repo
 ├── requirements-dev.txt              Dependency phục vụ build/release
+├── resources/                         Ảnh giao diện và hình minh họa
 ├── packaging/
 │   └── VRP-GA-Solver.spec            Cấu hình PyInstaller
 ├── .github/workflows/
@@ -204,37 +215,6 @@ Ngoài dữ liệu built-in, ứng dụng hỗ trợ:
     └── Latex/                        Source báo cáo học thuật
 ```
 
-## Chạy Từ Source
-
-Yêu cầu:
-
-- Python 3.10 trở lên, khuyến nghị Python 3.12.
-- Windows được khuyến nghị vì app đang đóng gói theo workflow Windows.
-
-```powershell
-cd VRP_GA_2_APP
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python main.py
-```
-
-## Build Executable Ở Local
-
-Từ thư mục gốc repo:
-
-```powershell
-python -m pip install -r VRP_GA_2_APP/requirements.txt -r requirements-dev.txt
-pyinstaller --noconfirm --clean packaging/VRP-GA-Solver.spec
-```
-
-Kết quả nằm trong:
-
-```text
-dist/VRP-GA-Solver/
-```
-
 ## Quy Trình Release Chuyên Nghiệp
 
 Repo đã cấu hình release theo quy trình giống một sản phẩm phần mềm:
@@ -244,35 +224,6 @@ Repo đã cấu hình release theo quy trình giống một sản phẩm phần 
 3. Khi tạo version tag, workflow release tự build app Windows.
 4. File ZIP được đính kèm vào GitHub Releases.
 5. Người dùng tải phần mềm bằng link release, không cần clone repo.
-
-Tạo release mới:
-
-```powershell
-git add .
-git commit -m "docs: introduce traffic optimization platform"
-git push origin main
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Sau khi workflow chạy xong, link tải `releases/latest` sẽ tự trỏ đến bản mới nhất.
-
-## Build Báo Cáo LaTeX
-
-File báo cáo chính nằm tại:
-
-```text
-VRP_GA_2_APP/Latex/Phuc2.tex
-```
-
-Báo cáo dùng `minted`, nên cần bật shell escape:
-
-```powershell
-cd VRP_GA_2_APP\Latex
-latexmk -pdf -shell-escape Phuc2.tex
-```
-
-Output được đưa vào `VRP_GA_2_APP/Latex/build/` và không được commit lên Git.
 
 ## Chất Lượng Và Quy Ước Repo
 
@@ -298,11 +249,3 @@ Các hướng phát triển tiếp theo:
 ## Tóm Tắt Cho Người Chấm Và Người Xem
 
 Dự án này thể hiện một pipeline đầy đủ từ mô hình hóa bài toán tối ưu giao thông, triển khai metaheuristic, trực quan hóa nghiệm, phân tích kết quả, xuất báo cáo đến đóng gói phần mềm. Phần lõi là Genetic Algorithm cho VRP/CVRP/VRPTW, được tối ưu bằng NumPy cost matrix và chạy nền bằng QThread để giao diện vẫn phản hồi trong quá trình tiến hóa nghiệm.
-
-Nếu chỉ xem nhanh repo, hãy bắt đầu từ:
-
-- `VRP_GA_2_APP/main.py`: chạy ứng dụng.
-- `VRP_GA_2_APP/ga_core/`: lõi giải thuật di truyền.
-- `VRP_GA_2_APP/ga_core/fitness.py`: công thức objective và penalty.
-- `VRP_GA_2_APP/gui/`: giao diện bản đồ, chart và dashboard.
-- `VRP_GA_2_APP/Latex/Phuc2.tex`: báo cáo học thuật.
