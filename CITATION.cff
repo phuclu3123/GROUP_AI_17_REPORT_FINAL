@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Nếu sử dụng mã nguồn hoặc báo cáo này, vui lòng trích dẫn repository."
+title: "Giải Bài Toán Tối Ưu Mạng/Luồng Giao Thông Dựa Trên Giải Thuật Di Truyền"
+type: software
+authors:
+  - name: "Nguyễn Hoàng Anh"
+  - name: "Lữ Võ Hoàng Phúc"
+  - name: "Nguyễn Đức Trí"
+  - name: "Minh Thư"
+keywords:
+  - "Vehicle Routing Problem"
+  - "Genetic Algorithm"
+  - "CVRP"
+  - "VRPTW"
+  - "optimization"
+  - "logistics"
+repository-code: "https://github.com/phuclu3123/GROUP_AI_17_REPORT_FINAL"
+abstract: "Repository chứa mã nguồn ứng dụng desktop và báo cáo hoàn chỉnh cho hệ thống giải bài toán định tuyến phương tiện VRP/CVRP/VRPTW bằng Giải thuật Di truyền."

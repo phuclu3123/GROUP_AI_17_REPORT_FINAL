@@ -7,6 +7,22 @@
 
 Mục tiêu của repo không chỉ là chạy một thuật toán, mà là xây dựng một ứng dụng desktop có giao diện, dữ liệu, trực quan hóa, dashboard, xuất báo cáo và quy trình đóng gói phần mềm giống một sản phẩm hoàn chỉnh.
 
+## Báo Cáo Nghiên Cứu
+
+Bản báo cáo hoàn chỉnh của nhóm được lưu trực tiếp trong repo:
+
+[Đọc báo cáo AI_N17_FINAL.pdf](docs/AI_N17_FINAL.pdf)
+
+| Hạng mục | Thông tin |
+| --- | --- |
+| Tên đề tài | Giải bài toán tối ưu mạng/luồng giao thông dựa trên Giải thuật Di truyền |
+| Học phần | Trí Tuệ Nhân Tạo |
+| Đơn vị | Trường Công nghệ và Thiết kế, Đại học Kinh tế TP. Hồ Chí Minh (UEH) |
+| Nhóm thực hiện | Nguyễn Hoàng Anh, Lữ Võ Hoàng Phúc, Nguyễn Đức Trí, Minh Thư |
+| Từ khóa | Vehicle Routing Problem, Genetic Algorithm, CVRP, VRPTW, optimization, logistics |
+
+Báo cáo trình bày cơ sở lý thuyết của VRP và Genetic Algorithm, cách mã hóa nghiệm bằng chromosome, thiết kế hàm fitness, toán tử chọn lọc/lai ghép/đột biến, mở rộng sang CVRP và VRPTW, thiết kế giao diện desktop, thực nghiệm đánh giá hiệu năng và định hướng phát triển tiếp theo.
+
 ## Tải Và Chạy Nhanh
 
 Bản Windows mới nhất:
@@ -257,7 +273,10 @@ Ngoài dữ liệu built-in, ứng dụng hỗ trợ:
 
 ```text
 .
+├── CITATION.cff                      Metadata trích dẫn repository trên GitHub
 ├── README.md                         Tài liệu giới thiệu chính của repo
+├── docs/
+│   └── AI_N17_FINAL.pdf              Báo cáo hoàn chỉnh của nhóm
 ├── requirements-dev.txt              Dependency phục vụ build/release
 ├── resources/                         Ảnh giao diện và hình minh họa
 ├── packaging/
